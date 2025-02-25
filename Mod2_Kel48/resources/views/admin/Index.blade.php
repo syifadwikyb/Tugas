@@ -4,8 +4,7 @@
 <h4 class="mt-5">Data Admin</h4>
 
 <a href="{{ route('admin.create') }}" class="btn btn-success rounded-3">Tambah Data</a>
-<a href="{{ route('admin.trash') }}" class="btn btn-secondary">Lihat Trash</a>
-<a href="{{ route('admin.export') }}" class="btn btn-info text-white">Export ke CSV</a>
+<a href="{{ route('admin.trash') }}" class="btn btn-danger">Lihat Sampah</a>
 
 @if ($message = Session::get('success'))
     <div class="alert alert-success mt-3" role="alert"> {{ $message }} </div>

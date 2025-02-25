@@ -20,6 +20,8 @@ Route::post('delete/{id}', [AdminController::class, 'delete'])->name('admin.dele
 
 Route::get('/admin/trash', [AdminController::class, 'trash'])->name('admin.trash');
 Route::post('/admin/restore/{id}', [AdminController::class, 'restore'])->name('admin.restore');
+Route::post('/admin/restore-all', [AdminController::class, 'restoreAll'])->name('admin.restore.all');
 Route::post('/admin/force-delete/{id}', [AdminController::class, 'forceDelete'])->name('admin.forceDelete');
+Route::post('/admin/force-delete-all', [AdminController::class, 'forceDeleteAll'])->name('admin.forceDelete.all');
 
 Route::get('/admin/export', [AdminController::class, 'exportCsv'])->name('admin.export');

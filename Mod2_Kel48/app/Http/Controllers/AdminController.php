@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Admin;
-use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -96,44 +95,24 @@ class AdminController extends Controller
         return redirect()->route('admin.trash')->with('success', 'Data Admin berhasil dikembalikan');
     }
 
-    // Menghapus data secara permanen
-    public function forceDelete($id)
+    // Restore all data dari Trash
+    public function restoreAll()
     {
-        $admin = Admin::onlyTrashed()->where('id_admin', $id)->firstOrFail();
-        $admin->forceDelete();
-
-        return redirect()->route('admin.trash')->with('success', 'Data Admin berhasil dihapus permanen');
+        Admin::onlyTrashed()->restore();
+        return redirect()->route('admin.trash')->with('success', 'Semua data berhasil dikembalikan');
     }
 
-    public function exportCsv()
+    // Delete data dari Trash
+    public function forceDelete($id)
     {
-        $admins = DB::table('admin')->get(); // Ambil semua data admin
-
-        $filename = "admin_list_" . date('Y-m-d') . ".csv"; // Nama file CSV
-
-        // Menulis data ke dalam format CSV
-        $handle = fopen('php://output', 'w');
-        fputcsv($handle, ['ID Admin', 'Nama', 'Alamat', 'Username']); // Header CSV
-
-        foreach ($admins as $admin) {
-            fputcsv($handle, [
-                $admin->id_admin,
-                $admin->nama_admin,
-                $admin->alamat,
-                $admin->username,
-            ]);
-        }
-
-        fclose($handle);
-
-        // Mengembalikan response sebagai file CSV
-        return response()->streamDownload(function () use ($handle) {
-            fclose($handle);
-        }, $filename, [
-            'Content-Type' => 'text/csv',
-            'Cache-Control' => 'no-store, no-cache',
-            'Pragma' => 'no-cache',
-            'Expires' => '0',
-        ]);
+        Admin::onlyTrashed()->where('id_admin', $id)->forceDelete();
+        return redirect()->route('admin.trash')->with('success', 'Data berhasil dihapus permanen');
+    }
+    
+    // Delete all data dari Trash
+    public function forceDeleteAll()
+    {
+        Admin::onlyTrashed()->forceDelete();
+        return redirect()->route('admin.trash')->with('success', 'Semua data berhasil dihapus permanen');
     }
 }
